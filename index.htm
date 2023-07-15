@@ -3,7 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
+    <style>
+      body {
+    margin: 0;
+    padding: 0;
+  }
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  input[type="text"] {
+    padding: 10px;
+    width: 70%;
+  }
+  
+  button {
+    padding: 10px 20px;
+  }
+  
+  #weatherInfo {
+    font-weight: bold;
+  }
+  
+    </style>
     <title>CURRENT WEATHER</title>
   </head>
   <body>
@@ -16,6 +52,36 @@
       <div id="weatherInfo"></div>
     </div>
 
-    <script src="./project.js"></script>
+    <script >
+      const locationForm = document.getElementById("locationForm");
+const locationInput = document.getElementById("locationInput");
+const weatherInfo = document.getElementById("weatherInfo");
+
+locationForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const location = locationInput.value;
+  getWeather(location);
+});
+
+function getWeather(location) {
+  const apiKey = "1c269de9d5c449699c880225231507"; 
+  const apiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=no`;
+
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      const temperature = data.current.temp_c;
+      const weatherDescription = data.current.condition.text;
+
+      weatherInfo.textContent = `Current ${location} temprature is: ${temperature}°C, ${weatherDescription}`;
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+      weatherInfo.textContent = "Your search is not found!";
+    });
+}
+
+    </script>
   </body>
 </html>
